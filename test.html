@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>WebSocket demo</title>
+    </head>
+    <body>
+        <script>
+            const websocket = new WebSocket("ws://localhost:8001/");
+
+            function sendTest(){
+                websocket.send("test");
+            }
+        </script>
+        <button onclick="sendTest()">Testing</button>
+    </body>
+</html>

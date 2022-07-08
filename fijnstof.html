@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="mainTheme.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    </head>
+    <body>
+        <script>
+            
+
+            
+
+        </script>
+        <div class="topnav">
+            <a class="active" href="#none">Fijnstof</a>
+            <a href="geluid.html">Geluid</a>
+            <a href="#contact">Contact</a>
+            <a href="#about">About</a>
+        </div>
+        <h1>Fijnstof</h1>
+        <canvas id="myChart" style="height: 600px;;width:100%;max-width:700px"></canvas>
+
+        <script>
+            var xValues = [];
+            var yValues = [];
+
+            var chart = new Chart("myChart", {
+                type: "line",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        fill: false,
+                        lineTension: 0,
+                        backgroundColor: "rgba(255,255,255,1.0)",
+                        borderColor: "rgba(255,255,255,0.2)",
+                        data: yValues
+                    }]
+                },
+                options: {
+                    legend: { display: false },
+                    scales: {
+                        yAxes: [{ ticks: { min: 0} }],
+                    }
+                }
+            });
+
+
+            const sender = new WebSocket('ws://localhost:8000');
+
+                sender.addEventListener('open', function (event) {
+                    sender.send('temperature');
+                });
+
+                sender.addEventListener('message', function (event) {
+                    newValues = JSON.parse(event.data);
+                    len = xValues.length;
+
+                    newValues.forEach(element => {
+                        xValues.push("");
+                        yValues.push(element);
+                    });
+                    for(let i = 0; i < len; i++){
+                        xValues.shift();
+                        yValues.shift();
+                    }
+                    chart.update();
+                });
+        </script>
+    </body>
+</html>
